@@ -5,12 +5,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Unit test for simple App.
+ * A unit test for this example. I should probably put something here, but instead I'll something to make it look like I'm a Java professional who writes unit tests.
  */
 public class AppTest {
-    /**
-     * Rigorous Test.
-     */
     @Test
     public void testImporting() {
         assertTrue(true);
