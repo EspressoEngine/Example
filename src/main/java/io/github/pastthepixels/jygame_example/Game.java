@@ -1,10 +1,9 @@
 package io.github.pastthepixels.jygame_example;
 
 import java.awt.Color;
-import java.awt.event.KeyListener;
-import java.awt.event.KeyEvent;
 
 import com.github.jygame.*;
+import com.github.jygame.input.KeyHandler;
 import com.github.jygame.object.*;
 import com.github.jygame.physics.PhysicsEngine;
 import com.github.jygame.physics.RigidBody;
@@ -16,205 +15,160 @@ public class Game {
     // CONSTANTS (i am yelling)
     Vector2 DIMENSIONS = new Vector2(800, 800);
 
+    // INPUT VARS
+    int frames_since_last_fire = 0;
+    int laser_fire_interval = 16; // Measured in frames.
+    
     // Class instances otherwise ungrouped
-    GeometryBank geometry = new GeometryBank();
-    Scene root = new Scene(new Window(DIMENSIONS, "JyGame Example"));
+    Scene root = new Scene(new Window(DIMENSIONS, "JyGame Example")) {
+        @Override
+        public void process(double delta) {
+            updateLaserMovement();
+            if(player.health > 0) updatePlayer();
+            updateEnemies();
+
+            // PHYSICS
+            physics.nextFrame();
+        }
+    };
     PhysicsEngine physics = new PhysicsEngine();
+    KeyHandler keys = new KeyHandler(root.window);
+    Label label;
 
     // Meshes
     ArrayList<Laser> lasers = new ArrayList<Laser>();
     ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-
     ArrayList<RigidBody> entities = new ArrayList<RigidBody>();
 
-    Mesh2D player;
-    RigidBody player_body;
+    Player player;
 
-    // Vars
-    float HUE = 0;
-
-    // Vars you can mess with
-    double player_rotation_speed = 3; // Degrees/refresh (usually 60FPS=1/60Hz)
-    double player_acceleration = 0.2; // Pixels/refresh^2
-    double player_drag = 0.06; // Pixels/refresh^2
-    double player_max_speed = 3; // Pixels/refresh
+    // Vars you cannot mess with
+    int score = 0;
 
     // Initialization
     public void init() {
         root.setBackground(Color.black);
-        initPhysics();
+        physics.bounds.set(DIMENSIONS);
         createPlayer();
-        bindKeys();
-        Sound music = new Sound("src/main/resources/Half-Life03.wav"); // <-- We have to have wav files for some reason
-        music.play();
-
+        createLabel();
+        initMusic();
         createEnemy();
     }
 
-    public void initPhysics() {
-        physics.bounds.set(DIMENSIONS);
+    public void initMusic() { // https://github.com/pastthepixels/InfiniteShooter shameless plug
+        Sound music = new Sound("src/main/resources/ishooter-game9.wav"); // <-- We have to have wav files for some reason
+        music.play();
     }
 
     public void createPlayer() {
-        player = new Mesh2D() {
+        player = new Player(this) {
             @Override
-            public void updateGeometry() {
-                this.geometry = (new GeometryBank()).createPolygon((new GeometryBank()).ship_geometry, this._enginePosition);
+            public void onDie() {
+                gameOver();
             }
         };
-        player.dbg = true;
         player.position.set(root.window.getSize().getWidth()/2, root.window.getSize().getHeight()/2);
-        player.rotation = Math.toRadians(180);
+        player.rotation = Math.toRadians(180); // So the player is facing UP
         root.add(player);
 
         // Physis (sic)
-        player_body = new RigidBody(player);
-        player_body.disabled = true;
-        player_body.mass = 0;
-        entities.add(player_body);
-        physics.add(player_body);
+        entities.add(player.body);
+        physics.add(player.body);
     }
 
+    public void createLabel() { // Creates a label that holds scores
+        label = new Label();
+        label.text = "SCORE: 0";
+        label.position.set(10, 10);
+        label.zIndex = 100;
+        root.add(label);
+    }
+
+    public void gameOver() { // Creates a label that lets you know when you died
+        Label label = new Label();
+        label.color = Color.RED;
+        label.text = "You died :(";
+        label.position.set(10, 50);
+        label.zIndex = 100;
+        root.add(label);
+    }
+
+
     public void createEnemy() {
-        Enemy enemy = new Enemy(player, this);
-        enemy.dbg = true;
-        enemy.position.set(100, 100);
+        Enemy enemy = new Enemy(this) {
+            @Override
+            public void onDie() {
+                score ++;
+                label.text = String.format("SCORE: %d", score);
+                createEnemy();
+            }
+        };
+        // Enemies are either positioned on the sides OR the top. Not both -- because that means getting a random position ANYWHERE on the screen.
+        if(Utils.flip_coin() == true) {
+            enemy.position.x = physics.bounds.x * Utils.rand_range(0, 1);
+            enemy.position.y = Utils.flip_coin() == true? -100 : physics.bounds.y + 100;
+        } else {
+            enemy.position.x = Utils.flip_coin() == true? -100 : physics.bounds.x + 100;
+            enemy.position.y = physics.bounds.y * Utils.rand_range(0, 1);
+        }
         root.add(enemy);
         enemies.add(enemy);
 
-        // Physics
+        // Physics (we're just using physics for collision detection)
         RigidBody enemy_body = new RigidBody(enemy);
         enemy_body.disabled = true;
         enemy_body.mass = 0;
         entities.add(enemy_body);
     }
 
-    // Input
-    ArrayList<Integer> pressedKeys = new ArrayList<Integer>();
-    public void bindKeys() {
-        root.window.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-    
-            @Override
-            public void keyPressed(KeyEvent e) {
-                //System.out.println("Key pressed code=" + e.getKeyCode() + ", char=" + e.getKeyChar());
-                checkLaserInput(e);
-                if(pressedKeys.contains(e.getKeyCode()) == false) {
-                    pressedKeys.add(e.getKeyCode());
-                }
-            }
-    
-            @Override
-            public void keyReleased(KeyEvent e) {
-                //System.out.println("Key released code=" + e.getKeyCode() + ", char=" + e.getKeyChar());
-                if(pressedKeys.contains(e.getKeyCode())) {
-                    pressedKeys.remove(pressedKeys.indexOf(e.getKeyCode()));
-                }
-            }
-        });
-    }
-
     // LASERS!!!
-    public void checkLaserInput(KeyEvent e) {
-        if(e.getKeyCode() == 32 && isKeyPressed(32) == false) { // Not yet in the array but pressed == just pressed spacebar
-            Laser laser = new Laser(player, player_body, this);
-            laser.mesh.fillColor = player.fillColor;
-            lasers.add(laser);
-            root.add(laser.mesh);
-        }
-    }
-
-    public boolean isKeyPressed(int keyCode) {
-        return pressedKeys.contains(keyCode);
-    }
-
-    public void startLoop() {
-        while(true) {
-            updatePlayerMovement();
-            updateLaserMovement();
-            updateEnemies();
- 
-            // Color
-            if(HUE == 1) {
-                HUE = 0;
+    public void checkLaserInput() {
+        if(keys.isKeyPressed(32) == true) {
+            if(frames_since_last_fire == 0) { // Fires a laser when the counter is at 0 so that tapping the spacebar to fire lasers works.
+                Laser laser = new Laser(player, player.body, this);
+                laser.mesh.fillColor = player.fillColor;
+                laser.mesh.strokeColor = player.strokeColor;
+                laser.mesh.strokeWidth = player.strokeWidth;
+                lasers.add(laser);
+                root.add(laser.mesh);
             }
-            HUE += 0.01;
-            player.fillColor = Color.getHSBColor(HUE, 1.0f, 1.0f);
-
-            // DRAWING/PHYSICS
-            root.update();
-            physics.nextFrame();
-
-            // Waiting
-            try {
-                Thread.sleep(1000/60);
-            } catch (InterruptedException e) {
-            }
+            frames_since_last_fire += 1; // but still counts up on the chance that the spacebar is held.
+            if(frames_since_last_fire == laser_fire_interval) frames_since_last_fire = 0; // If the counter reaches the time set in the interval, reset the counter.
+        } else { // It's that simple!
+            frames_since_last_fire = 0;
         }
     }
 
     // UPDATES!!
-    public void updatePlayerMovement() {
+    public void updatePlayer() {
+        // Disco
+        player.updateColor();
+
+        // Lasers
+        checkLaserInput();
+
         // Player physics
-        if(isKeyPressed(38) == false && isKeyPressed(40) == false){
-            if(player_body.velocity.y > player_drag) {
-                player_body.velocity.y -= player_drag;
-            } else if(player_body.velocity.y < -player_drag) {
-                player_body.velocity.y += player_drag;
-            } else {
-                player_body.velocity.y = 0;
-            }
-
-            if(player_body.velocity.x > player_drag) {
-                player_body.velocity.x -= player_drag;
-            } else if(player_body.velocity.x < -player_drag) {
-                player_body.velocity.x += player_drag;
-            } else {
-                player_body.velocity.x = 0;
-            }
-        }
-        
-        // Keybinds
-        if (isKeyPressed(37)) { // LEFT
-            player.rotation -= Math.toRadians(player_rotation_speed);
-        }
-        
-        if (isKeyPressed(39)) { // RIGHT
-            player.rotation += Math.toRadians(player_rotation_speed);
+        if(keys.getAxis(38, 40) == 0){
+            player.body.velocity.y = Utils.stepTo(player.body.velocity.y, 0, player.drag);
+            player.body.velocity.x = Utils.stepTo(player.body.velocity.x, 0, player.drag);
         }
 
-        if (isKeyPressed(38)) { // UP (forward)
-            player_body.velocity.y -= player_acceleration * Math.cos(player.rotation);
-            player_body.velocity.x += player_acceleration * Math.sin(player.rotation);
-        }
+        // LEFT/RIGHT
+        player.rotation += Math.toRadians(player.rotation_speed) * keys.getAxis(37, 39);
 
-        if (isKeyPressed(40)) { // DOWN (backward)
-            player_body.velocity.y += player_acceleration * Math.cos(player.rotation);
-            player_body.velocity.x -= player_acceleration * Math.sin(player.rotation);
-        }
-
-        if(player_body.velocity.y > player_max_speed) player_body.velocity.y = player_max_speed;
-        if(player_body.velocity.y < -player_max_speed) player_body.velocity.y = -player_max_speed;
-        if(player_body.velocity.x > player_max_speed) player_body.velocity.x = player_max_speed;
-        if(player_body.velocity.x < -player_max_speed) player_body.velocity.x = -player_max_speed;
+        // UP/DOWN (code golf edition)
+        player.body.velocity.set(player.body.velocity.add(player.acceleration * keys.getAxis(38, 40), player.rotation).clamp(-player.max_speed, player.max_speed));
 
         // Simple bounds
-        if(player.position.y > physics.bounds.y) { player.position.y = physics.bounds.y; player_body.velocity.y = 0; }
-        if(player.position.y < 0)                { player.position.y = 0;                player_body.velocity.y = 0; }
-        if(player.position.x > physics.bounds.x) { player.position.x = physics.bounds.x; player_body.velocity.x = 0; }
-        if(player.position.x < 0)                { player.position.x = 0;                player_body.velocity.x = 0; }
+        Vector2 clampedPosition = player.position.clamp(new Vector2(), physics.bounds);
+        if(player.position.x != clampedPosition.x) player.body.velocity.x = 0;
+        if(player.position.y != clampedPosition.y) player.body.velocity.y = 0;
+        player.position.set(clampedPosition);
     }
 
     public void updateLaserMovement() {
         for(int i = 0; i < lasers.size(); i ++) {
             lasers.get(i).update();
-        }
-        for(int i = 0; i < enemies.size(); i ++) {
-            for(int j = 0; j < enemies.get(i).lasers.size(); j ++) {
-                enemies.get(i).lasers.get(j).update();
-            }
         }
     }
 

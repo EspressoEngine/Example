@@ -1,2 +1,5 @@
 # JyGame-Example
-An example game utilizing my JyGame library.
+![](screenshot.jpg)
+An example game utilizing the [JyGame](https://github.com/pastthepixels/JyGame) library.
+
+## How do I run it?

@@ -14,9 +14,10 @@ public class Laser {
 
     double velocity = 15; // Pixels/refresh
 
+    double damage = 5;
+
     public Laser(Mesh2D sender, RigidBody senderBody, Game game) {
         this.game = game;
-        mesh.dbg = true;
         mesh.zIndex = -1;
         mesh.fillColor = Color.RED;
         mesh.size.set(6, 32);
@@ -25,8 +26,9 @@ public class Laser {
         // Physics
         body = new RigidBody(mesh) {
             @Override
-            public void onBodyEntered(RigidBody body) {
+            public void onBodyEntered(RigidBody body) { // <-- importan (sic)
                 if(game.entities.indexOf(body) > -1 && body != senderBody) {
+                    ((Entity)body.object).hurt(damage);
                     remove();
                 }
             }
@@ -42,9 +44,8 @@ public class Laser {
         game.lasers.remove(this);
     }
 
-    public void update() {
-        mesh.position.y += velocity * Math.cos(mesh.rotation);
-        mesh.position.x -= velocity * Math.sin(mesh.rotation);
+    public void update() { // Uses the power of TRIG to move forward in the direction it is rotating
+        mesh.position.set(mesh.position.add(velocity, mesh.rotation));
         //bounds
         if(mesh.position.y > game.physics.bounds.y || mesh.position.x > game.physics.bounds.x ) remove();
         if(mesh.position.y < 0                     || mesh.position.x < 0                     ) remove();
