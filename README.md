@@ -1,5 +1,5 @@
 # JyGame-Example
-![](screenshot.jpg)
+![](./screenshot.png)  
 An example game utilizing the [JyGame](https://github.com/pastthepixels/JyGame) library.
 
 ## How do I run it?
