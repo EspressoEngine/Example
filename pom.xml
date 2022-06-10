@@ -17,6 +17,14 @@
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>github</id>
+      <name>GitHub PastThePixels Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/pastthepixels/JyGame</url>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
