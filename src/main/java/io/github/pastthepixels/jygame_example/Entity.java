@@ -1,6 +1,6 @@
 package io.github.pastthepixels.jygame_example;
 
-import com.github.jygame.object.Mesh2D;
+import io.github.espressoengine.object.Mesh2D;
 
 public class Entity extends Mesh2D {
     // Game mechanics

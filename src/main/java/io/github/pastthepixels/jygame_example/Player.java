@@ -1,6 +1,6 @@
 package io.github.pastthepixels.jygame_example;
 
-import com.github.jygame.physics.RigidBody;
+import io.github.espressoengine.physics.RigidBody;
 
 import java.awt.Color;
 import java.util.concurrent.Executors;

@@ -2,10 +2,10 @@ package io.github.pastthepixels.jygame_example;
 
 import java.awt.Color;
 
-import com.github.jygame.Scene;
-import com.github.jygame.Vector2;
-import com.github.jygame.object.Mesh2D;
-import com.github.jygame.sound.Sound;
+import io.github.espressoengine.Scene;
+import io.github.espressoengine.Vector2;
+import io.github.espressoengine.object.Mesh2D;
+import io.github.espressoengine.sound.Sound;
 
 public class Explosion {
     Vector2 origin = new Vector2();

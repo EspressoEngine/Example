@@ -1,9 +1,9 @@
 package io.github.pastthepixels.jygame_example;
 
-import com.github.jygame.Scene;
-import com.github.jygame.Vector2;
-import com.github.jygame.object.Rect;
-import com.github.jygame.object.Object;
+import io.github.espressoengine.Scene;
+import io.github.espressoengine.Vector2;
+import io.github.espressoengine.object.Rect;
+import io.github.espressoengine.object.Object;
 
 import java.awt.Color;
 

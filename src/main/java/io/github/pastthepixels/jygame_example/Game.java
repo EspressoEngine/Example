@@ -2,12 +2,12 @@ package io.github.pastthepixels.jygame_example;
 
 import java.awt.Color;
 
-import com.github.jygame.*;
-import com.github.jygame.input.KeyHandler;
-import com.github.jygame.object.*;
-import com.github.jygame.physics.PhysicsEngine;
-import com.github.jygame.physics.RigidBody;
-import com.github.jygame.sound.*;
+import io.github.espressoengine.*;
+import io.github.espressoengine.input.KeyHandler;
+import io.github.espressoengine.object.*;
+import io.github.espressoengine.physics.PhysicsEngine;
+import io.github.espressoengine.physics.RigidBody;
+import io.github.espressoengine.sound.*;
 
 import java.util.ArrayList;
 

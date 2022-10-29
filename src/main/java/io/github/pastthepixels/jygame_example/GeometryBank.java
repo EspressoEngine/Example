@@ -1,6 +1,6 @@
 package io.github.pastthepixels.jygame_example;
 
-import com.github.jygame.Vector2;
+import io.github.espressoengine.Vector2;
 
 import java.awt.Polygon;
 

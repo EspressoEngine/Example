@@ -1,6 +1,6 @@
 package io.github.pastthepixels.jygame_example;
 
-import com.github.jygame.physics.RigidBody;
+import io.github.espressoengine.physics.RigidBody;
 
 public class Enemy extends Entity {
 
