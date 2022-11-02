@@ -55,8 +55,8 @@ public class Game {
         createEnemy();
     }
 
-    public void initMusic() { // https://github.com/pastthepixels/InfiniteShooter shameless plug
-        Sound music = new Sound("src/main/resources/ishooter-game9.wav"); // <-- We have to have wav files for some reason
+    public void initMusic() {
+        Sound music = new Sound("src/main/resources/soundtrack.wav"); // <-- We have to have wav files for some reason
         music.play();
     }
 
