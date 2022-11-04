@@ -1,4 +1,4 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
 import java.awt.Color;
 

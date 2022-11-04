@@ -1,4 +1,4 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
 import java.awt.Color;
 
@@ -20,7 +20,7 @@ public class Game {
     int laser_fire_interval = 16; // Measured in frames.
     
     // Class instances otherwise ungrouped
-    Scene root = new Scene(new Window(DIMENSIONS, "JyGame Example")) {
+    Scene root = new Scene(new Window(DIMENSIONS, "Espresso Example")) {
         @Override
         public void process(double delta) {
             updateLaserMovement();
@@ -57,6 +57,7 @@ public class Game {
 
     public void initMusic() {
         Sound music = new Sound("src/main/resources/soundtrack.wav"); // <-- We have to have wav files for some reason
+        music.setLoop(true);
         music.play();
     }
 
@@ -125,7 +126,7 @@ public class Game {
     public void checkLaserInput() {
         if(keys.isKeyPressed(32) == true) {
             if(frames_since_last_fire == 0) { // Fires a laser when the counter is at 0 so that tapping the spacebar to fire lasers works.
-                Laser laser = new Laser(player, player.body, this);
+                Laser laser = new Laser(player, player.body, this, player.laser_sound);
                 laser.mesh.fillColor = player.fillColor;
                 laser.mesh.strokeColor = player.strokeColor;
                 laser.mesh.strokeWidth = player.strokeWidth;

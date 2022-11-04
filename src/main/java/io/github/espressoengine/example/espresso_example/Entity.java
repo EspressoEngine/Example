@@ -1,4 +1,4 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
 import io.github.espressoengine.object.Mesh2D;
 

@@ -1,5 +1,6 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
+import io.github.espressoengine.sound.Sound;
 import io.github.espressoengine.object.*;
 import io.github.espressoengine.physics.RigidBody;
 
@@ -16,7 +17,8 @@ public class Laser {
 
     double damage = 5;
 
-    public Laser(Mesh2D sender, RigidBody senderBody, Game game) {
+
+    public Laser(Mesh2D sender, RigidBody senderBody, Game game, Sound preloaded_laser_sound) {
         this.game = game;
         mesh.zIndex = -1;
         mesh.fillColor = Color.RED;
@@ -36,6 +38,8 @@ public class Laser {
         body.disabled = true;
         body.mass = 0;
         game.physics.add(body);
+        // Commented right now because Espresso can't load a sound once and then play it repeatedly so that each repeat can overlap one another
+        // preloaded_laser_sound.play();
     }
 
     public void remove() {

@@ -1,6 +1,7 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
 import io.github.espressoengine.physics.RigidBody;
+import io.github.espressoengine.sound.Sound;
 
 public class Enemy extends Entity {
 
@@ -14,6 +15,8 @@ public class Enemy extends Entity {
     int frames_since_last_fire = 0; // Please don't mess with this
     
     int frames_to_fire = 100; // Frames until a laser is fired.
+
+    public Sound laser_sound = new Sound("src/main/resources/laser-fire.wav");
 
     @Override
     public void updateGeometry() {
@@ -59,7 +62,7 @@ public class Enemy extends Entity {
     }
 
     public void fire() {
-        Laser laser = new Laser(this, this.body, this.game);
+        Laser laser = new Laser(this, this.body, this.game, this.laser_sound);
         laser.mesh.fillColor = fillColor;
         game.lasers.add(laser);
         game.root.add(laser.mesh);

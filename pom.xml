@@ -4,12 +4,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.github.pastthepixels.jygame_example</groupId>
+  <groupId>io.github.espressoengine.example</groupId>
   <artifactId>jygame_example</artifactId>
   <version>1.0</version>
 
-  <name>JyGame Example</name>
-  <url>https://github.com/pastthepixels/JyGame-Example</url>
+  <name>Espresso Example</name>
+  <url>https://github.com/EspressoEngine/Example</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +33,7 @@
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.4.0</version>
           <configuration>
-            <mainClass>io.github.pastthepixels.jygame_example.App</mainClass>
+            <mainClass>io.github.espressoengine.example.App</mainClass>
           </configuration>
         </plugin>
         <plugin>
@@ -41,7 +41,7 @@
           <configuration>
             <archive>
               <manifest>
-                <mainClass>io.github.pastthepixels.jygame_example.App</mainClass>
+                <mainClass>io.github.espressoengine.example.App</mainClass>
               </manifest>
             </archive>
             <descriptorRefs>

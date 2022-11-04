@@ -1,7 +1,8 @@
-package io.github.pastthepixels.jygame_example;
+package io.github.espressoengine.example;
 
 import io.github.espressoengine.physics.RigidBody;
 
+import io.github.espressoengine.sound.Sound;
 import java.awt.Color;
 import java.util.concurrent.Executors;
 
@@ -19,6 +20,8 @@ public class Player extends Entity {
     double acceleration = 0.5; // Pixels/refresh^2
     double drag = 0.06; // Pixels/refresh^2
     double max_speed = 4; // Pixels/refresh
+
+    public Sound laser_sound = new Sound("src/main/resources/laser-fire.wav");
 
     public Player(Game game) {
         this.game = game;
