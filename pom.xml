@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.github.espressoengine.example</groupId>
-  <artifactId>jygame_example</artifactId>
+  <artifactId>espresso_example</artifactId>
   <version>1.0</version>
 
   <name>Espresso Example</name>
