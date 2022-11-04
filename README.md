@@ -1,4 +1,4 @@
-# Espresso-Example
+# An example game for Espresso
 ![image](https://user-images.githubusercontent.com/52388215/200090554-845dfe15-7212-437c-80e2-2d975e9d1e82.png)
 
 An example game utilizing the [Espresso](https://github.com/pastthepixels/Espresso) library.
