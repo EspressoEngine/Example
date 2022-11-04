@@ -1,12 +1,16 @@
 # Espresso-Example
-![](./screenshot.png)  
+![image](https://user-images.githubusercontent.com/52388215/200090554-845dfe15-7212-437c-80e2-2d975e9d1e82.png)
+
 An example game utilizing the [Espresso](https://github.com/pastthepixels/Espresso) library.
 
 ## How do I run it?
+## Method A
 1. Go to the Releases tab and download the .jar
-2. Run `java -jar jygame_example-1.0-full.jar`
+2. Run it with`java -jar`
+## Method B
+1. Clone this repository
+2. Run `mvn exec:java`
 
 ## How do I compile it?
-1. Install Espresso to your computer either via something something GitHub Packages or following the instructions in its README
-2. Clone this repository
-3. Run `mvn clean compile assembly:single`
+1. Clone this repository
+2. Run `mvn clean compile assembly:single`
