@@ -57,7 +57,7 @@ public class Game {
 
     public void initMusic() {
         Sound music = new Sound("src/main/resources/soundtrack.wav"); // <-- We have to have wav files for some reason
-        music.setLoop(true);
+        music.loop = true;
         music.play();
     }
 
