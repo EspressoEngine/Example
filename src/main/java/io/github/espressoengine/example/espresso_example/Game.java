@@ -56,9 +56,10 @@ public class Game {
     }
 
     public void initMusic() {
-        Sound music = new Sound("src/main/resources/soundtrack.wav"); // <-- We have to have wav files for some reason
-        music.loop = true;
-        music.play();
+        MIDIPlayer midi_player = new MIDIPlayer("src/main/resources/soundtrack.mid");
+        midi_player.setSoundFont("src/main/resources/gzdoom.sf2");
+        midi_player.loopInfinitely();
+        midi_player.play();
     }
 
     public void createPlayer() {
