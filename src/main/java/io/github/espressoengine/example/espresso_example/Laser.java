@@ -38,8 +38,7 @@ public class Laser {
         body.disabled = true;
         body.mass = 0;
         game.physics.add(body);
-        // Commented right now because Espresso can't load a sound once and then play it repeatedly so that each repeat can overlap one another
-        // preloaded_laser_sound.play();
+        preloaded_laser_sound.play();
     }
 
     public void remove() {
