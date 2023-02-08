@@ -5,6 +5,7 @@ import io.github.espressoengine.physics.RigidBody;
 import io.github.espressoengine.sound.Sound;
 import java.awt.Color;
 import java.util.concurrent.Executors;
+import io.github.espressoengine.Resource;
 
 public class Player extends Entity {
     GeometryBank geomBank = new GeometryBank();
@@ -21,7 +22,7 @@ public class Player extends Entity {
     double drag = 0.06; // Pixels/refresh^2
     double max_speed = 4; // Pixels/refresh
 
-    public Sound laser_sound = new Sound("src/main/resources/laser-fire.wav");
+    public Sound laser_sound = new Sound(new Resource("laser-fire.wav"));
 
     public Player(Game game) {
         this.game = game;

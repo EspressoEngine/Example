@@ -2,6 +2,7 @@ package io.github.espressoengine.example;
 
 import io.github.espressoengine.physics.RigidBody;
 import io.github.espressoengine.sound.Sound;
+import io.github.espressoengine.Resource;
 
 public class Enemy extends Entity {
 
@@ -16,7 +17,7 @@ public class Enemy extends Entity {
     
     int frames_to_fire = 100; // Frames until a laser is fired.
 
-    public Sound laser_sound = new Sound("src/main/resources/laser-fire.wav");
+    public Sound laser_sound = new Sound(new Resource("laser-fire.wav"));
 
     @Override
     public void updateGeometry() {

@@ -6,6 +6,7 @@ import io.github.espressoengine.Scene;
 import io.github.espressoengine.Vector2;
 import io.github.espressoengine.object.Mesh2D;
 import io.github.espressoengine.sound.Sound;
+import io.github.espressoengine.Resource;
 
 public class Explosion {
     Vector2 origin = new Vector2();
@@ -14,7 +15,7 @@ public class Explosion {
     double rate = 0.001;
     double opacity = 255;
 
-    public Sound sound = new Sound("src/main/resources/vineboom.wav");
+    public Sound sound = new Sound(new Resource("vineboom.wav"));
 
     Mesh2D background = new Mesh2D() {
         double scale = 2;

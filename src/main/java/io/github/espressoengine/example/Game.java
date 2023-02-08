@@ -18,7 +18,7 @@ public class Game {
     // INPUT VARS
     int frames_since_last_fire = 0;
     int laser_fire_interval = 16; // Measured in frames.
-    
+
     // Class instances otherwise ungrouped
     Scene root = new Scene(new Window(DIMENSIONS, "Espresso Example")) {
         @Override
@@ -56,8 +56,8 @@ public class Game {
     }
 
     public void initMusic() {
-        MIDIPlayer midi_player = new MIDIPlayer("src/main/resources/soundtrack.mid");
-        midi_player.setSoundFont("src/main/resources/gzdoom.sf2");
+        MIDIPlayer midi_player = new MIDIPlayer(new Resource("soundtrack.mid"));
+        midi_player.setSoundFont(new Resource("gzdoom.sf2"));
         midi_player.loopInfinitely();
         midi_player.play();
     }
